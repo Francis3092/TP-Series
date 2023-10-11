@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+
+<div class="text-center">
+    <h1 class="display-4">Bienvenido a CineORT</h1>
+    <p>Descubrí nuevas series y reviví las clásicas</p>
+</div>
+
+@foreach (Series recorrerSeries in @ViewBag.Series)
+{
+    <div class="card">
+        <img src="@recorrerSeries.ImagenSerie" alt="Imagen 1">
+        <div class="card-content">
+            <h3>@recorrerSeries.Nombre</h3>
+            <div class="buttons">
+                <button>Temporadas</button>
+                <button>Actores</button>
+                <button>Más info</button>
+            </div>
+        </div>
+    </div>
+}
