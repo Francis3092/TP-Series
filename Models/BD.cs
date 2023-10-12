@@ -5,8 +5,6 @@ public static class BD
 {
     private static string _ConnectionString = @"Server=localhost; DataBase=BDSeries; Trusted_Connection=True;";
 
-    //Ver cual de estas hace falta y cual no
-
     public static List<Series> ObtenerSeries()
     {
         List<Series> _ListadoSeries = new List<Series>();
@@ -20,68 +18,42 @@ public static class BD
         return _ListadoSeries;
     }
 
-    public static Series ObtenerSerie(int serie)
+    public static Series ObtenerSerie(int idSerie)
     {
         Series Serie = null;
 
         using (SqlConnection db = new SqlConnection(_ConnectionString))
         {
-            string SQL = "SELECT * FROM Series WHERE IdSerie = @pSerie";
-            Serie = db.QueryFirstOrDefault<Series>(SQL, new { pSerie = serie });
+            string SQL = "SELECT * FROM Series WHERE IdSerie = @pIdSerie";
+            Serie = db.QueryFirstOrDefault<Series>(SQL, new { pIdSerie = idSerie });
         }
         return Serie;
     }
 
-    public static List<Actores> ObtenerActores()
+    public static List<Actores> ObtenerActores(int idSerie)
     {
         List<Actores> _ListadoActores = new List<Actores>();
 
         using (SqlConnection db = new SqlConnection(_ConnectionString))
         {
-            string SQL = "SELECT * FROM Actores";
-            _ListadoActores = db.Query<Actores>(SQL).ToList();
+            string SQL = "SELECT * FROM Actores WHERE IdSerie = @pIdSerie";
+            _ListadoActores = db.Query<Actores>(SQL, new { pIdSerie = idSerie } ).ToList();
         }
 
         return _ListadoActores;
     }
 
-    public static Actores ObtenerActor(int actor)
-    {
-        Actores Actor = null;
-
-        using (SqlConnection db = new SqlConnection(_ConnectionString))
-        {
-            string SQL = "SELECT * FROM Actores WHERE IdActor = @pActor";
-            Actor = db.QueryFirstOrDefault<Actores>(SQL, new { pActor = actor });
-        }
-        
-        return Actor;
-    }
-
-    public static List<Temporadas> ObtenerTemporadas()
+    public static List<Temporadas> ObtenerTemporadas(int idSerie)
     {
         List<Temporadas> _ListadoTemporadas = new List<Temporadas>();
 
         using (SqlConnection db = new SqlConnection(_ConnectionString))
         {
-            string SQL = "SELECT * FROM Temporadas";
-            _ListadoTemporadas = db.Query<Temporadas>(SQL).ToList();
+            string SQL = "SELECT * FROM Temporadas WHERE IdSerie = @pIdSerie";
+            _ListadoTemporadas = db.Query<Temporadas>(SQL, new { pIdSerie = idSerie } ).ToList();
         }
 
         return _ListadoTemporadas;
-    }
-
-    public static Temporadas ObtenerTemporada(int temporada)
-    {
-        Temporadas Temporada = null;
-
-        using (SqlConnection db = new SqlConnection(_ConnectionString))
-        {
-            string SQL = "SELECT * FROM Temporadas WHERE IdTemprorada = @pTemporada";
-            Temporada = db.QueryFirstOrDefault<Temporadas>(SQL, new { pTemporada = temporada });
-        }
-
-        return Temporada;
     }
 
 }

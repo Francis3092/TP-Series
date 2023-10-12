@@ -16,10 +16,81 @@
         <div class="card-content">
             <h3>@recorrerSeries.Nombre</h3>
             <div class="buttons">
-                <button>Temporadas</button>
-                <button>Actores</button>
-                <button>Más info</button>
+                <button data-bs-toggle="modal" data-bs-target="#ModalTemporadas" onclick="VerDetalleTemporadas(@recorrerSeries.IdSerie)">Temporadas</button>
+                <button data-bs-toggle="modal" data-bs-target="#ModalSeries" onclick="VerDetalleActores(@recorrerSeries.IdSerie)">Actores</button>
+                <button data-bs-toggle="modal" data-bs-target="#ModalSeries" onclick="VerDetalleSeries(@recorrerSeries.IdSerie)">Más info</button>
             </div>
         </div>
     </div>
 }
+
+<div class="modal fade" id="ModalTemporadas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Nombre">Temporadas</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="Sinopsis"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function VerDetalleSeries(IdS){
+            $.ajax(
+                {
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/Home/VerDetalleSeries',
+                    data: {idSerie: IdSerie},
+                    success:
+                        function(response)
+                        {
+                            $("#Nombre").html(response.Nombre);
+                            $("#Sinopsis").html(response.Sinopsis);
+                        }
+                }
+            );
+        }
+        function VerDetalleTemporadas(IdSerie){
+            $.ajax(
+                {
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/Home/VerDetalleTemporadas',
+                    data: {idSerie: IdSerie},
+                    success:
+                        function(response)
+                        {
+                            $("#titulo").html("Temporadas");
+                            $("#info").html(response.numerotemporada + " " + response.titulotemporada);
+                        }
+                }
+            );
+        }
+        function VerDetalleActores(IdSerie){
+            $.ajax(
+                {
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/Home/VerDetalleActores',
+                    data: {idSerie: IdSerie},
+                    success:
+                        function(response)
+                        {
+                            $("#titulo").html("Actores");
+                            $("#info").html(response.nombre);
+                        }
+                }
+            );
+        }
+</script>

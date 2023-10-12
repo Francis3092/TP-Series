@@ -19,6 +19,24 @@ public class HomeController : Controller
         return View();
     }
 
+    public Series VerDetalleSeries(int IdSerie)
+    {
+        ViewBag.MostrarSerie = BD.ObtenerSerie(IdSerie);
+        return ViewBag.MostrarSerie;
+    }
+
+    public List<Actores> VerDetalleActores(int IdSerie)
+    {
+        ViewBag.MostrarActores = BD.ObtenerActores(IdSerie);
+        return ViewBag.MostrarActores;
+    }
+
+    public List<Temporadas> VerDetalleTemporadas(int IdSerie)
+    {
+        ViewBag.MostrarTemporadas = BD.ObtenerTemporadas(IdSerie);
+        return ViewBag.MostrarTemporadas;
+    }
+
     public IActionResult Privacy()
     {
         return View();
