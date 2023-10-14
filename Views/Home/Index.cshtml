@@ -4,93 +4,134 @@
 
 <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 
-<div class="text-center">
-    <h1 class="display-4">Bienvenido a CineORT</h1>
-    <p>Descubrí nuevas series y reviví las clásicas</p>
+<div class="titulo">
+    <h1>Bienvenido a CineORT</h1>
 </div>
+<p class="texto">Descubrí nuevas series y reviví las clásicas</p>
 
-@foreach (Series recorrerSeries in @ViewBag.Series)
-{
-    <div class="card">
-        <img src="@recorrerSeries.ImagenSerie" alt="Imagen 1">
-        <div class="card-content">
-            <h3>@recorrerSeries.Nombre</h3>
-            <div class="buttons">
-                <button data-bs-toggle="modal" data-bs-target="#ModalTemporadas" onclick="VerDetalleTemporadas(@recorrerSeries.IdSerie)">Temporadas</button>
-                <button data-bs-toggle="modal" data-bs-target="#ModalSeries" onclick="VerDetalleActores(@recorrerSeries.IdSerie)">Actores</button>
-                <button data-bs-toggle="modal" data-bs-target="#ModalSeries" onclick="VerDetalleSeries(@recorrerSeries.IdSerie)">Más info</button>
+<div class="d-flex flex-row">
+    @foreach (Series recorrerSeries in @ViewBag.Series)
+    {
+        <div class="card">
+            <img src="@recorrerSeries.ImagenSerie" alt="Imagen 1">
+            <div class="card-content">
+                <h3>@recorrerSeries.Nombre</h3>
+                <div class="botones">
+                    <button data-bs-toggle="modal" data-bs-target="#ModalTemporadas"
+                        onclick="MostrarDetalleTemporadas(@recorrerSeries.IdSerie)" class="boton" style="display: block;">Temporadas</button>
+                    <button data-bs-toggle="modal" data-bs-target="#ModalActores"
+                        onclick="MostrarDetalleActores(@recorrerSeries.IdSerie)" class="boton" style="display: block;">Actores</button>
+                    <button data-bs-toggle="modal" data-bs-target="#ModalSeries"
+                        onclick="MostrarDetalleSeries(@recorrerSeries.IdSerie)" class="boton" style="display: block;">Más info</button>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
 
-<div class="modal fade" id="ModalTemporadas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+
+
+<div class="modal fade" id="ModalTemporadas" tabindex="-1" aria-labelledby="ModalTemporadasLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="Nombre">Temporadas</h5>
+                <h5 class="modal-title" id="ModalTemporadasLabel">Temporadas</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div id="Sinopsis"></div>
+            <div class="modal-body" id="TemporadasContent">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalActores" tabindex="-1" aria-labelledby="ModalActoresLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalActoresLabel">Actores</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="ActoresContent">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalSeries" tabindex="-1" aria-labelledby="ModalSeriesLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalSeriesLabel">Información</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="SeriesContent">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-        function VerDetalleSeries(IdS){
-            $.ajax(
-                {
-                    type: 'POST',
-                    dataType: 'JSON',
-                    url: '/Home/VerDetalleSeries',
-                    data: {idSerie: IdSerie},
-                    success:
-                        function(response)
-                        {
-                            $("#Nombre").html(response.Nombre);
-                            $("#Sinopsis").html(response.Sinopsis);
-                        }
+    function MostrarDetalleTemporadas(idS) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/Home/VerDetalleTemporadas',
+            data: { IdSerie: idS },
+            success:
+                function (response) {
+                    var content = "<ul>";
+                    response.forEach(element => {
+                        content += "<li>" + element.tituloTemporada + "<li>";
+                    });
+                    $("#TemporadasContent").html(content);
                 }
-            );
-        }
-        function VerDetalleTemporadas(IdSerie){
-            $.ajax(
-                {
-                    type: 'POST',
-                    dataType: 'JSON',
-                    url: '/Home/VerDetalleTemporadas',
-                    data: {idSerie: IdSerie},
-                    success:
-                        function(response)
-                        {
-                            $("#titulo").html("Temporadas");
-                            $("#info").html(response.numerotemporada + " " + response.titulotemporada);
-                        }
+        });
+    }
+
+    function MostrarDetalleActores(idS) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/Home/VerDetalleActores',
+            data: { IdSerie: idS },
+            success:
+                function (response) {
+                    var content = "<ul>";
+                    response.forEach(element => {
+                        content += "<li>" + element.nombre + "</li>";
+                    });
+                    $("#ActoresContent").html(content);
                 }
-            );
-        }
-        function VerDetalleActores(IdSerie){
-            $.ajax(
-                {
-                    type: 'POST',
-                    dataType: 'JSON',
-                    url: '/Home/VerDetalleActores',
-                    data: {idSerie: IdSerie},
-                    success:
-                        function(response)
-                        {
-                            $("#titulo").html("Actores");
-                            $("#info").html(response.nombre);
-                        }
+        })
+    }
+
+    function MostrarDetalleSeries(idS) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/Home/VerDetalleSeries',
+            data: { IdSerie: idS },
+            success:
+                function (response) {
+                    $("#SeriesContent").html(response.sinopsis);
                 }
-            );
-        }
+        })
+    }
 </script>
