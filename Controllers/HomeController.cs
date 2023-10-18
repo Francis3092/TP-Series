@@ -21,20 +21,20 @@ public class HomeController : Controller
 
     public Series VerDetalleSeries(int IdSerie)
     {
-        ViewBag.MostrarSerie = BD.ObtenerSerie(IdSerie);
-        return ViewBag.MostrarSerie;
+        
+        return BD.ObtenerSerie(IdSerie);
     }
 
     public List<Actores> VerDetalleActores(int IdSerie)
     {
-        ViewBag.MostrarActores = BD.ObtenerActores(IdSerie);
-        return ViewBag.MostrarActores;
+        
+        return  BD.ObtenerActores(IdSerie);
     }
 
     public List<Temporadas> VerDetalleTemporadas(int IdSerie)
     {
-        ViewBag.MostrarTemporadas = BD.ObtenerTemporadas(IdSerie);
-        return ViewBag.MostrarTemporadas;
+        
+        return  BD.ObtenerTemporadas(IdSerie);
     }
 
     public IActionResult Privacy()
